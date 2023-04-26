@@ -1,34 +1,143 @@
-Version; 0.0;
-T-;STATION;ACTION
-
-;PHASE;Priming Rocket System
-;SF;Confirm test site is clear of all unauthorized personnel
-;RM;Put on PPE
-;MC;Announce PHASE YELLOW
-;RM;Move to test site.
-;GS;Confirm N2O bottle temperature @TBD sensor is below 30C.
-;RM;Confirm N20 bottle hose connector is attached.
-;RM;TODO: Confirm all the other hose connectors.
-;ENG;Start camera recording.
-;RM;Grab Multimeter
-;RM;Put on ESD protection wristband.
-;RM;Confirm ESD protection wristband is connected to ground.
-;RM;Set multimeter to TBD settings.
-;RM;Confirm voltage of ignition circuit is below TBD mA.
-;RM;Connect Igniter cables to ignition circuit. 
-;RM;Confirm Manual vent valve is closed.
-;GS;Confirm Oxidizer Valve is closed.
-;GS;Confirm remote vent valve is closed.
-;RM;Take positions for N2O bottle opening.
-;RM;Remove N2O bottle cap.
-;RM;Stepwise open N2O bottle and check for leakage. If leakage occurs close N2O bottle immediately and switch to Abort procedure.
-;RM/GS;Check & compare pressures @Bottle-Gauge and @P-Bottle. If above 65 bar switch to Abort procedure!
-;RM;Move to operation center.
-;PHASE;Ignition Preparations
-
-;PHASE;Ignition Sequence
-
-DESIGNATIONS;;
-MC;Mission Control/Operations -> alternative OP;
-GS;Ground Support ;
-RM;Rocket Motor -> the ones outside;
+Version; 0.0;;;
+;;;;
+;DESIGNATIONS;;;
+;MC;Mission Control/Operations -> alternative OP;;
+;GS;Ground Support ;;
+;RM;Rocket Motor -> the ones outside;;
+;El;Electronics;;
+;;;;
+T-;STATION;ACTION;Checkbox;Value
+;;;;
+;Phase;Green;;
+T-2h;MC;Anounce countdown start;;
+;MC;Anounce Phase Green;;
+;;;;
+;Phase;Electronics Comunications;;
+;Sub-Phase;Ensure the following: ;;
+;El;Rock 4C+ power on;;
+;El;USB connection between Rock 4C+ and Arduino (Using a no power USB cable);;
+;El;Ethernet cable connection between Rock 4C+ and laptop ;;
+;;;;
+;Sub-Phase;Setting up the laptop terminal ;;
+;El;Start the Tilix terminal application on the laptop (windows button and then search);;
+;El;Use ctrl+alt+a to open a new terminal window inside Tilix (3 should be enough);;
+;El;Left click or use alt+[arrow key] to navigate between terminal windows;;
+;;;;
+;Sub-Phase;Data reading and backup;;
+;El;Use “ ping rock-4c-plus.local ” to ensure ethernet connection and confirm zero packet loss ;;
+;El;"Use "" ssh rock@rock-4c-plus.local ” to remote connect to Rock 4C+ ";;
+;El;"n the ssh terminal (opened in 3.2) use "" sudo python3 scripts/serial_reader.py ” to start reading serial data and save it to the Rock 4C+ ";;
+;El;Use “ ssh rock@rock-4c-plus.local “tail -f scripts/data.csv” | tee data.csv ” to get a live reading of the sensor data and write it locally to the laptop;;
+;El;Use “python3 live_grapher_opt.py” to start live graphing the sensor data ;;
+;;;;
+;Phase;Electronics Sensor;;
+;Sub-Phase;Preassure sensor;;
+;El;Ensure that the sensors are plugged in correctly and that they are powered.  ;;
+;El;Confirm whether or not the sensor has started generating data going to the laptop. ;;
+;El;Determine whether or not the data that is being received is close to what is expected, i.e., ambient pressure everywhere except for in the oxidizer tank.  ;;
+;;;;
+;Sub-Phase;Thermocouples;;
+;El;Ensure that the sensors are plugged in correctly.  ;;
+;El;Verify that the data being received by the laptop is equivalent to ambient temperature.  If possible, spike the data using the body temperature from a hand or finger (or something else, TBD) to ensure that the sensor reacts to changing temperatures.  ;;
+;;;;
+;Sub-Phase;IR-sensor;;
+;El;Ensure that the sensor is plugged in correctly and that it is powered. If the sensor is powered a green LED will flash at its “base”. ;;
+;El;Verify (preferably using a thermocouple in some way) that it is providing values close to ambient temperature. This value will not be exactly right, since the emissivity value in the sensor settings will be set for measuring the engine exhaust plume.  If possible, spike the data to ensure that the sensor reacts to changing temperatures.  ;;
+;;;;
+;Sub-Phase;Loadcell;;
+;El;Ensure that the sensor is plugged in and powered. ;;
+;El;Verify that the load cell, when no force is being applied, is only outputting the value zero. If it does not, the offset from the oxidizer piping has not been taken into account properly, or it has changed. In this case the offset can be accounted for manually with later values. ;;
+;El;Apply force to the load cell and verify that this also leads to a spike in the received data.;;
+;;;;
+;Phase;Electronics Control;;
+;Phase;1. Reset the software into TEST mode and run the tests. ;;
+;Sub-Phase;Ground the test pin 0 (Arduino pin 23) and reset the Arduino Mega. ;;
+;El;Starts the software in TEST mode. ;;
+;;;;
+;Sub-Phase;Verify the buzzer can be controlled by the software.   ;;
+;El;(Ground the test pin 1 (Arduino pin 25);;
+;El;Equates to valve mosfet 3).;;
+;;;;
+;Sub-Phase;Not applicable in version V1 - Verify the heating blanket can be controlled by the software. ;;
+;El;Ground the test pin 2 (Arduino pin 27) ;;
+;El;Equates to valve mosfet 2. ;;
+;;;;
+;Sub-Phase;Verify the oxidizer valve can be controlled by the software. ;;
+;El;Ground the test pin 3 (Arduino pin 29). ;;
+;El;Equates to valve mosfet 1. ;;
+;;;;
+;Sub-Phase;Verify the secondary ignition relay can be activated by the software. ;;
+;El;Ground the test pin 4 (Arduino pin 31). ;;
+;El;Measure continuity between IGNISENSE and IGNITION ;;
+;El;Both with relay activated and deactivated. ;;
+;;;;
+;Sub-Phase;Verify the full firing sequence works and timing is correct. ;;
+;El;Ground the test pin 5 (Arduino pin 33) ;;
+;El;Forced sequence flag is set true. ;;
+;El;GSE presses the ignition button, starting the sequence. ;;
+;El;Listen to relays and valves and make sure they are activated. ;;
+;El;Order: Igniter relay, valve, igniter relay, valve. ;;
+;El;Measure that the igniter circuit gets a voltage (~24V). ;;
+;;;;
+;Sub-Phase;Not applicable in version V1 - Verify valves can be controlled by the software. ;;
+;El;Test each of the valves individually and verify they can be opened. ;;
+;El;This version uses only one valve. Other mosfets can be used for buzzer and heating blanket. ;;
+;;;;
+;Sub-Phase;Not applicable in version V1 - Verify servos can be controlled by the software. ;;
+;El;Run the servos through a sweep sequence. ;;
+;;;;
+;Sub-Phase;Verify the software can be reset through the software. ;;
+;El;Ground the test pin 6 (Arduino pin 35). ;;
+;El;Confirm with GSE the software is reset. ;;
+;;;;
+;Phase ;2.Verify Software is switched off from TEST mode. ;;
+;El;Software is reset with a power cycle, Arduino reset button or software reset pin (test pin 6). ;;
+;El;Confirmed with GSE;;
+;;;;
+;Phase;3. Coordinate with GSE (Control Box Operator);;
+;El;Verify that the main power relay can be activated from the control box. ;;
+;El;Both with E-Stop button activated and not activated. ;;
+;El;Measure the continuity between PSU_24V and 24V. ;;
+;;;;
+;Sub-Phase;Verify that the two primary ignition relays can be activated from the control box. ;;
+;El;Both with ignition button and key not activated and activated. ;;
+;El;Measure continuity between IGN_GND and PGND ;;
+;El;Measure continuity between 24V and IGNISENSE ;;
+;;;;
+;Sub-Phase;Verify that the heating blanket relay can be activated from the control box. ;;
+;El;Both with heating blanket button activated and not activated. ;;
+;El;Measure continuity between 24V and HEATING ;;
+;;;;
+;Phase;VERY LATE INTO THE PROCEDURES: Measure igniter circuit voltage before attaching the igniter. ;;
+;;Before each measurement, measure a 9V battery to verify the function of the multimeter.;;
+;;Verify voltage between leads is less than TBD ;;
+;;Verify voltage from each lead to ground is less than TBD ;;
+;;;;
+T-30;PHASE;Priming Rocket System;;
+;SF;Confirm test site is clear of all unauthorized personnel;;
+;RM;Put on PPE;;
+;MC;Announce PHASE YELLOW;;
+;RM;Move to test site.;;
+;GS;Confirm N2O bottle temperature @TBD sensor is below 30C.;;
+;RM;Confirm N20 bottle hose connector is attached.;;
+;RM;TODO: Confirm all the other hose connectors.;;
+;ENG;Start camera recording.;;
+;RM;Grab Multimeter;;
+;RM;Put on ESD protection wristband.;;
+;RM;Confirm ESD protection wristband is connected to ground.;;
+;RM;Set multimeter to TBD settings.;;
+;RM;Confirm voltage of ignition circuit is below TBD mA.;;
+;RM;Connect Igniter cables to ignition circuit. ;;
+;RM;Confirm Manual vent valve is closed.;;
+;GS;Confirm Oxidizer Valve is closed.;;
+;GS;Confirm remote vent valve is closed.;;
+;RM;Take positions for N2O bottle opening.;;
+;RM;Remove N2O bottle cap.;;
+;RM;Stepwise open N2O bottle and check for leakage. If leakage occurs close N2O bottle immediately and switch to Abort procedure.;;
+;RM/GS;Check & compare pressures @Bottle-Gauge and @P-Bottle. If above 65 bar switch to Abort procedure!;;
+;RM;Move to operation center.;;
+;;;;
+;PHASE;Ignition Preparations;;
+;;Anounce Phase RED;;
+;;;;
+T-0;PHASE;Ignition Sequence;;
