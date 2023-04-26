@@ -1,1 +1,34 @@
-version,0
+Version; 0.0;
+T-;STATION;ACTION
+
+;PHASE;Priming Rocket System
+;SF;Confirm test site is clear of all unauthorized personnel
+;RM;Put on PPE
+;MC;Announce PHASE YELLOW
+;RM;Move to test site.
+;GS;Confirm N2O bottle temperature @TBD sensor is below 30C.
+;RM;Confirm N20 bottle hose connector is attached.
+;RM;TODO: Confirm all the other hose connectors.
+;ENG;Start camera recording.
+;RM;Grab Multimeter
+;RM;Put on ESD protection wristband.
+;RM;Confirm ESD protection wristband is connected to ground.
+;RM;Set multimeter to TBD settings.
+;RM;Confirm voltage of ignition circuit is below TBD mA.
+;RM;Connect Igniter cables to ignition circuit. 
+;RM;Confirm Manual vent valve is closed.
+;GS;Confirm Oxidizer Valve is closed.
+;GS;Confirm remote vent valve is closed.
+;RM;Take positions for N2O bottle opening.
+;RM;Remove N2O bottle cap.
+;RM;Stepwise open N2O bottle and check for leakage. If leakage occurs close N2O bottle immediately and switch to Abort procedure.
+;RM/GS;Check & compare pressures @Bottle-Gauge and @P-Bottle. If above 65 bar switch to Abort procedure!
+;RM;Move to operation center.
+;PHASE;Ignition Preparations
+
+;PHASE;Ignition Sequence
+
+DESIGNATIONS;;
+MC;Mission Control/Operations -> alternative OP;
+GS;Ground Support ;
+RM;Rocket Motor -> the ones outside;
