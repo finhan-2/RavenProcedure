@@ -7,8 +7,11 @@ def stop_count_down():
     print('Hello')
 
 main_window = ctk.CTk()
-main_window.geometry("1250x750")
 main_window.title('Raven Procedures')
+#main_window.eval("tk::PlaceWindow . center")
+x = main_window.winfo_screenwidth() // 8
+y = int(main_window.winfo_screenheight() * 0.05)
+main_window.geometry("1250x750+" + str(x) + '+' + str(y))
 ctk.set_appearance_mode("dark") # Modes: "System" (standard), "Dark", "Light"
 ctk.set_default_color_theme("dark-blue")  # Themes: "blue" (standard), "green", "dark-blue"
 
