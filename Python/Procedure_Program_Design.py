@@ -1,10 +1,40 @@
 import customtkinter as ctk
+from datetime import datetime, timedelta
+countdown_time = 1800
+countdown_on = False
+
+def count_down():
+    global countdown_time
+    if countdown_on:
+        # tt = datetime.fromtimestamp(countdown_time)
+        # string = tt.strftime("%H:%M:%S")
+        # display = string
+        # clock['text'] = display
+        time = timedelta(seconds=countdown_time)
+        clock.configure(text='T-'+ str(time))
+
+        clock.after(1000, count_down)
+        countdown_time -=1
+
+
+
+
 
 def start_count_down():
-    print('Hello')
+    global countdown_on
+    countdown_on = True
+    start_button.configure(state='disabled')
+    count_down()
 
 def stop_count_down():
-    print('Hello')
+    global countdown_on
+    countdown_on = False
+    start_button.configure(state='normal')
+
+
+
+
+
 
 main_window = ctk.CTk()
 main_window.title('Raven Procedures')
@@ -20,23 +50,23 @@ options_frame = ctk.CTkFrame(main_window, width=140)
 options_frame.pack(side = ctk.LEFT, fill = ctk.Y)
 
 # Options label
-option_label = ctk.CTkLabel(options_frame, text='Options', font=ctk.CTkFont(size=20, weight='bold'))
+option_label = ctk.CTkLabel(options_frame, text='Procedure Options', font=ctk.CTkFont(size=20, weight='bold'))
 option_label.pack(padx = 20, pady=(20,10))
 
 
-# Main Procedures Button
-main_pro_button = ctk.CTkButton(options_frame,text="Main Procedures", command=start_count_down, width=(150), height=(30))  
-main_pro_button.pack(padx = 20, pady = 10)
+# Add Procedures Button
+add_pro_button = ctk.CTkButton(options_frame,text="Add Procedures", command=start_count_down, width=(150), height=(30))  
+add_pro_button.pack(padx = 20, pady = 10)
 
 
-# Engine Pre Procedures Button
-engine_pro_button = ctk.CTkButton(options_frame,text="Engine Pre Procedures", command=start_count_down, width=(150), height=(30))  
-engine_pro_button.pack(padx = 20, pady = 10)
+# Change Procedures Button
+change_pro_button = ctk.CTkButton(options_frame,text="Change Procedures", command=start_count_down, width=(150), height=(30))  
+change_pro_button.pack(padx = 20, pady = 10)
 
 
-# Electronic Pre Procedures Button
-electronic_pro_button = ctk.CTkButton(options_frame,text="Electronic Pre Procedures", command=start_count_down, width=(150), height=(30))  
-electronic_pro_button.pack(padx = 20, pady = 10)
+# View Procedures Button
+view_pro_button = ctk.CTkButton(options_frame,text="View Procedures", command=start_count_down, width=(150), height=(30))  
+view_pro_button.pack(padx = 20, pady = 10)
 #start_button.grid(row = 2, column = 2)
 
 # Countdown frame
@@ -44,7 +74,7 @@ countdown_frame = ctk.CTkFrame(main_window, width=900, height=300)
 countdown_frame.pack(side = ctk.TOP, pady = 10)
 
 # Countdown Clock as label
-clock = ctk.CTkLabel(countdown_frame, text='count_down', font=ctk.CTkFont(size=50, weight='bold'))
+clock = ctk.CTkLabel(countdown_frame, text='T-'+str(timedelta(seconds=countdown_time)), font=ctk.CTkFont(size=50, weight='bold'))
 clock.pack(pady=(40))
 #clock.grid(row = 0, column = 2)
 
