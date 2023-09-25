@@ -1,24 +1,24 @@
 import customtkinter as ctk
 from datetime import datetime, timedelta
-countdown_time = 1800
+countdown_time = 10
 countdown_on = False
+
+#------------------------
+# Countdown Clock Functions
+#-----------------------
 
 def count_down():
     global countdown_time
     if countdown_on:
-        # tt = datetime.fromtimestamp(countdown_time)
-        # string = tt.strftime("%H:%M:%S")
-        # display = string
-        # clock['text'] = display
-        time = timedelta(seconds=countdown_time)
-        clock.configure(text='T-'+ str(time))
+        if countdown_time >=0:
+            time = timedelta(seconds=countdown_time)
+            clock.configure(text='T-'+ str(time))
+        elif countdown_time <0:
+            time = timedelta(seconds=abs(countdown_time)) # Use abs to convert to possitive
+            clock.configure(text='T+'+ str(time))        
 
         clock.after(1000, count_down)
         countdown_time -=1
-
-
-
-
 
 def start_count_down():
     global countdown_on
@@ -31,11 +31,11 @@ def stop_count_down():
     countdown_on = False
     start_button.configure(state='normal')
 
+#-----------------------
+# Design
+#------------------------
 
-
-
-
-
+# Main Window
 main_window = ctk.CTk()
 main_window.title('Raven Procedures')
 #main_window.eval("tk::PlaceWindow . center")
