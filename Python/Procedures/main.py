@@ -212,7 +212,7 @@ def apply_new_time(hours, minutes, seconds):
         new_time_form.destroy()
 
 #-----------------------------
-# View all objects in database
+# View all objects in database  You can press view object multiple times, should remove the objects that are viewed
 #-----------------------------
 def view_procedure():
     conn = sqlite3.connect('proceduresdata.db')
@@ -228,7 +228,7 @@ def view_procedure():
         procedure_text_frame = ctk.CTkFrame(procedure_frame)
         procedure_text_frame.pack(side=ctk.TOP)
 
-        label = ctk.CTkLabel(procedure_text_frame, text=f'{row[1]}\t\t T- {row[2]}h {row[3]}m {row[4]}s', bg_color = 'orange', text_color = 'black', width=400, height=30)
+        label = ctk.CTkLabel(procedure_text_frame, text=f'{row[1]}\t\t T- {row[2]}h {row[3]}m {row[4]}s', bg_color='orange', text_color = 'black', width=400, height=30)
         label.pack(pady=5, side=ctk.LEFT)
         label_list.append(label)
 
