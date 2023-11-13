@@ -9,6 +9,10 @@ countdown_on = False
 register_form = None
 new_time_form = None
 label_list = []
+checkbox_lst = []
+procedure_frame_list = []
+
+selected_checkbox = []
 
 #------------------------
 # Countdown Clock Functions
@@ -224,19 +228,69 @@ def view_procedure():
     for label in label_list:
         label.destroy()
 
-    for i, row in enumerate(data):
+    for frame in procedure_frame_list:
+        frame.destroy()
+    procedure_frame_list.clear()
+
+    for procedure_check_box in checkbox_lst:
+        procedure_check_box.destroy()
+    checkbox_lst.clear()
+
+    selected_checkbox.clear()
+
+
+    for i, row in enumerate(data):       
+
         procedure_text_frame = ctk.CTkFrame(procedure_frame)
         procedure_text_frame.pack(side=ctk.TOP)
+        procedure_frame_list.append(procedure_text_frame)
+
+        select = ctk.IntVar(value=1)
+        selected_checkbox.append(select)
+        selected_checkbox[-1].set(0)
 
         label = ctk.CTkLabel(procedure_text_frame, text=f'{row[1]}\t\t T- {row[2]}h {row[3]}m {row[4]}s', bg_color='orange', text_color = 'black', width=400, height=30)
         label.pack(pady=5, side=ctk.LEFT)
         label_list.append(label)
 
         # Make corresponding check boxes for each procedure
-        procedure_check_box = ctk.CTkCheckBox(procedure_text_frame, text='')
+        procedure_check_box = ctk.CTkCheckBox(procedure_text_frame, text='', variable=selected_checkbox[-1], command= checkbox(), onvalue=1, offvalue=0)
+        procedure_check_box.var = selected_checkbox[-1]
+        procedure_check_box._onvalue=1
+        procedure_check_box._offvalue=0
+        procedure_check_box.deselect()
         procedure_check_box.pack(padx=5, side=ctk.RIGHT)
+        checkbox_lst.append(procedure_check_box)
 
     conn.close()
+
+def checkbox():
+    # function runs on creation of checkbox, need to make sure it doesn't exede list range
+
+
+    # checkbox_value = [selected_checkbox[i].get() for i in selected_checkbox]
+
+    
+    # print(selected_checkbox[0].get())
+
+    for i in range(0, len(selected_checkbox)):
+        checkbox = selected_checkbox[i].get()
+
+        if checkbox == 1:
+            label_list[i].configure(bg_color ='grey')
+            print('Uppdating')
+        else:
+            label_list[i].configure(bg_color ='orange')
+            print('Not working')
+        
+        # if select.get() == 1:
+        #     label_list[row].configure(bg_color ='grey')
+        # else:
+        #     label_list[row].configure(bg_color ='orange')
+
+        
+        # print(selected_checkbox[row].get())
+    pass
 
 
 #-----------------------
