@@ -216,7 +216,7 @@ def apply_new_time(hours, minutes, seconds):
         new_time_form.destroy()
 
 #-----------------------------
-# View all objects in database  You can press view object multiple times, should remove the objects that are viewed
+# View all objects in database  You can only press it once, pressing it again breaks it 
 #-----------------------------
 def view_procedure():
     conn = sqlite3.connect('proceduresdata.db')
@@ -236,6 +236,8 @@ def view_procedure():
         procedure_check_box.destroy()
     checkbox_lst.clear()
 
+    for int_var in selected_checkbox:
+        int_var.destroy() 
     selected_checkbox.clear()
 
 
@@ -254,7 +256,7 @@ def view_procedure():
         label_list.append(label)
 
         # Make corresponding check boxes for each procedure
-        procedure_check_box = ctk.CTkCheckBox(procedure_text_frame, text='', variable=selected_checkbox[-1], command= checkbox(), onvalue=1, offvalue=0)
+        procedure_check_box = ctk.CTkCheckBox(procedure_text_frame, text='', variable=selected_checkbox[-1], command= checkbox, onvalue=1, offvalue=0)
         procedure_check_box.var = selected_checkbox[-1]
         procedure_check_box._onvalue=1
         procedure_check_box._offvalue=0
@@ -265,14 +267,8 @@ def view_procedure():
     conn.close()
 
 def checkbox():
-    # function runs on creation of checkbox, need to make sure it doesn't exede list range
 
-
-    # checkbox_value = [selected_checkbox[i].get() for i in selected_checkbox]
-
-    
-    # print(selected_checkbox[0].get())
-
+# Write comment
     for i in range(0, len(selected_checkbox)):
         checkbox = selected_checkbox[i].get()
 
@@ -283,14 +279,6 @@ def checkbox():
             label_list[i].configure(bg_color ='orange')
             print('Not working')
         
-        # if select.get() == 1:
-        #     label_list[row].configure(bg_color ='grey')
-        # else:
-        #     label_list[row].configure(bg_color ='orange')
-
-        
-        # print(selected_checkbox[row].get())
-    pass
 
 
 #-----------------------
