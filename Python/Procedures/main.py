@@ -11,7 +11,6 @@ new_time_form = None
 label_list = []
 checkbox_lst = []
 procedure_frame_list = []
-
 selected_checkbox = []
 
 #------------------------
@@ -225,32 +224,40 @@ def view_procedure():
     cursor.execute('SELECT * FROM procedures WHERE procedure IS NOT NULL AND procedure != "" ORDER BY total DESC')
     data = cursor.fetchall()
 
+    
+    # Remove previous intvar in list
+    selected_checkbox.clear()
+
+
+    # Remove labels from GUI and removes them from list
     for label in label_list:
         label.destroy()
+    label_list.clear()
 
-    for frame in procedure_frame_list:
-        frame.destroy()
-    procedure_frame_list.clear()
-
+    # Remove checkbox from GUI and removes them from list
     for procedure_check_box in checkbox_lst:
         procedure_check_box.destroy()
     checkbox_lst.clear()
 
-    for int_var in selected_checkbox:
-        int_var.destroy() 
-    selected_checkbox.clear()
+    # Remove frame (that holds label and checkbox) from GUI and removes them from list
+    for frame in procedure_frame_list:
+        frame.destroy()
+    procedure_frame_list.clear()
 
-
+    # Loop through all data and display them
     for i, row in enumerate(data):       
 
+        # Create a container that holds 
         procedure_text_frame = ctk.CTkFrame(procedure_frame)
         procedure_text_frame.pack(side=ctk.TOP)
         procedure_frame_list.append(procedure_text_frame)
 
+        # Create intvar for checkbox logic
         select = ctk.IntVar(value=1)
         selected_checkbox.append(select)
         selected_checkbox[-1].set(0)
 
+        # Create label for procedure text
         label = ctk.CTkLabel(procedure_text_frame, text=f'{row[1]}\t\t T- {row[2]}h {row[3]}m {row[4]}s', bg_color='orange', text_color = 'black', width=400, height=30)
         label.pack(pady=5, side=ctk.LEFT)
         label_list.append(label)
@@ -268,18 +275,19 @@ def view_procedure():
 
 def checkbox():
 
-# Write comment
+    # Look through the selected_checkbox list to see which intvar was changed
     for i in range(0, len(selected_checkbox)):
         checkbox = selected_checkbox[i].get()
 
+        # intvar 1
         if checkbox == 1:
             label_list[i].configure(bg_color ='grey')
-            print('Uppdating')
+            
+        # intvar 0
         else:
             label_list[i].configure(bg_color ='orange')
-            print('Not working')
+            
         
-
 
 #-----------------------
 # Main Application
