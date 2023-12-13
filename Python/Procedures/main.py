@@ -327,10 +327,14 @@ def checkbox():
 
         # intvar 1
         if checkbox == 1:
+            # Change color of the selected row to grey
             label_list[i].configure(bg_color='grey')
+
+            # Save the time when checkbox was clicked
 
         # intvar 0
         else:
+            # Change the color of the row back to original
             label_list[i].configure(bg_color=procedure_color_list[i])
 
 
